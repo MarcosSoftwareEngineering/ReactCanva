@@ -2,20 +2,73 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   ShoppingCart, ShieldCheck, Truck, 
   ChevronDown, Star, ArrowRight, Instagram, Mail, X, Trash2, PlayCircle, Quote,
-  Gift, Clock, Shield, User, MapPin, 
-  CreditCard, CheckCircle, QrCode, Settings
+  Gift, Clock, Shield, MapPin, 
+  CreditCard, CheckCircle, QrCode, Settings, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 // ==========================================
-// MOCK DATA INICIAL
+// MOCK DATA INICIAL (7 QUADROS)
 // ==========================================
 const PRODUTOS_INICIAIS = [
-  { id: 1, nome: "Abstrato em Ouro Metálico", preco: 890.00, estoque: 5, imagem: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", tag: "Mais Vendido" },
-  { id: 2, nome: "Minimalismo Geométrico", preco: 650.00, estoque: 12, imagem: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", tag: "Lançamento" },
-  { id: 3, nome: "Textura Escandinava", preco: 1200.00, estoque: 2, imagem: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", tag: "Premium" },
-  { id: 4, nome: "Pinceladas Noturnas", preco: 780.00, estoque: 8, imagem: "https://images.unsplash.com/photo-1578301978693-85fa9c03fa75?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", tag: "" },
-  { id: 5, nome: "Botânica em Aquarela", preco: 450.00, estoque: 15, imagem: "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", tag: "Novo" },
-  { id: 6, nome: "Oceano Profundo", preco: 950.00, estoque: 3, imagem: "https://images.unsplash.com/photo-1518998053401-b2643194a2cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", tag: "Exclusivo" }
+  { 
+    id: 1, nome: "Abstrato em Ouro Metálico", preco: 890.00, estoque: 5, 
+    imagem: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+    imagens: [
+      "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1577083552431-6e5fd01988ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    ],
+    tag: "Mais Vendido" 
+  },
+  { 
+    id: 2, nome: "Minimalismo Geométrico", preco: 650.00, estoque: 12, 
+    imagem: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+    imagens: [
+      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    ],
+    tag: "Lançamento" 
+  },
+  { 
+    id: 3, nome: "Textura Escandinava", preco: 1200.00, estoque: 2, 
+    imagem: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+    imagens: [
+      "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1600607688969-a5bfcd64bd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    ],
+    tag: "Premium" 
+  },
+  { 
+    id: 4, nome: "Pinceladas Noturnas", preco: 780.00, estoque: 8, 
+    imagem: "https://images.unsplash.com/photo-1578301978693-85fa9c03fa75?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+    imagens: [
+      "https://images.unsplash.com/photo-1578301978693-85fa9c03fa75?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1579762715459-5a068c289fda?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    ],
+    tag: "" 
+  },
+  { 
+    id: 5, nome: "Botânica em Aquarela", preco: 450.00, estoque: 15, 
+    imagem: "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+    imagens: [
+      "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1490204732731-e4078513511b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    ],
+    tag: "Novo" 
+  },
+  { 
+    id: 6, nome: "Oceano Profundo", preco: 950.00, estoque: 3, 
+    imagem: "https://images.unsplash.com/photo-1518998053401-b2643194a2cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+    imagens: [
+      "https://images.unsplash.com/photo-1518998053401-b2643194a2cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    ],
+    tag: "Exclusivo" 
+  },
+  { 
+    id: 7, nome: "Aurora de Cobre", preco: 1050.00, estoque: 4, 
+    imagem: "https://images.unsplash.com/photo-1508898578281-774ac4893c0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+    tag: "Destaque" 
+  }
 ];
 
 const DEPOIMENTOS = [
@@ -59,18 +112,18 @@ const Hero = () => (
     <div className="hero-overlay"></div>
     
     <div className="lp-container hero-content">
-      <div className="badge-exclusive" style={{background: 'rgba(255,255,255,0.1)', color: '#FFF', borderColor: 'rgba(255,255,255,0.3)'}}>
+      <div className="badge-exclusive">
         Edição Limitada
       </div>
-      <h2 className="hero-title" style={{color: '#FFF'}}>A Arte que Transforma o Seu Ambiente</h2>
-      <p className="hero-subtitle" style={{color: 'rgba(255,255,255,0.8)'}}>
+      <h2 className="hero-title">A Arte que Transforma o Seu Ambiente</h2>
+      <p className="hero-subtitle">
         Quadros decorativos em canvas com qualidade de museu e acabamento premium para lares sofisticados.
       </p>
       <div className="hero-cta-group">
         <button className="btn-primary-large" onClick={rolarParaProdutos}>
           Garantir Meu Quadro <ArrowRight size={20} />
         </button>
-        <p className="safe-checkout" style={{color: 'rgba(255,255,255,0.6)'}}>
+        <p className="safe-checkout">
           <ShieldCheck size={16} /> Compra 100% Segura
         </p>
       </div>
@@ -81,7 +134,7 @@ const Hero = () => (
 const ShowcaseMedia = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   return (
-    <React.Fragment>
+    <div className="showcase-container">
       <section className="showcase-section">
         <div className="lp-container showcase-grid">
           <div className="showcase-content">
@@ -111,7 +164,7 @@ const ShowcaseMedia = () => {
           </div>
         </div>
       )}
-    </React.Fragment>
+    </div>
   );
 };
 
@@ -132,62 +185,82 @@ const IrresistibleOffer = () => {
   return (
     <section className="offer-section">
       <div className="lp-container">
-        <div className="offer-card">
-          <div className="offer-left">
-            <div className="offer-badge"><Clock size={16} /> Oferta por Tempo Limitado</div>
-            <h2 className="offer-title">Condição VIP de Lançamento</h2>
-            <p className="offer-desc">Compre qualquer quadro hoje e leve um pacote de benefícios exclusivo.</p>
-            <div className="countdown-timer">
-              <div className="countdown-box"><span className="countdown-num">{String(hours).padStart(2, '0')}</span><span className="countdown-label">Horas</span></div><span className="countdown-separator">:</span>
-              <div className="countdown-box"><span className="countdown-num">{String(minutes).padStart(2, '0')}</span><span className="countdown-label">Minutos</span></div><span className="countdown-separator">:</span>
-              <div className="countdown-box"><span className="countdown-num">{String(seconds).padStart(2, '0')}</span><span className="countdown-label">Segundos</span></div>
+        
+        {/* === CARD COM BORDA BRILHANTE (GLOW EMITIDO) === */}
+        <div className="glow-wrapper">
+          <div className="glow-inner offer-card-inner">
+            <div className="offer-left">
+              <div className="offer-badge"><Clock size={16} /> Oferta por Tempo Limitado</div>
+              <h2 className="offer-title">Condição VIP de Lançamento</h2>
+              <p className="offer-desc">Compre qualquer quadro hoje e leve um pacote de benefícios exclusivo.</p>
+              <div className="countdown-timer">
+                <div className="countdown-box"><span className="countdown-num">{String(hours).padStart(2, '0')}</span><span className="countdown-label">Horas</span></div><span className="countdown-separator">:</span>
+                <div className="countdown-box"><span className="countdown-num">{String(minutes).padStart(2, '0')}</span><span className="countdown-label">Minutos</span></div><span className="countdown-separator">:</span>
+                <div className="countdown-box"><span className="countdown-num">{String(seconds).padStart(2, '0')}</span><span className="countdown-label">Segundos</span></div>
+              </div>
+            </div>
+            <div className="offer-right">
+              <ul className="offer-benefits-list">
+                <li><Truck size={24} color="#C05A46" className="shrink-0"/><div><strong>Frete Expresso Grátis</strong><span>Enviamos para todo o Brasil sem custo.</span></div></li>
+                <li><Gift size={24} color="#C05A46" className="shrink-0"/><div><strong>Kit Instalação <span className="line-through">R$ 149,00</span> (Grátis)</strong><span>Gabarito e buchas de alta fixação.</span></div></li>
+                <li><Shield size={24} color="#C05A46" className="shrink-0"/><div><strong>Garantia de 30 Dias</strong><span>Se não combinar, devolvemos seu dinheiro.</span></div></li>
+              </ul>
             </div>
           </div>
-          <div className="offer-right">
-            <ul className="offer-benefits-list">
-              <li><Truck size={24} color="#C05A46" className="shrink-0"/><div><strong>Frete Expresso Grátis</strong><span>Enviamos para todo o Brasil sem custo.</span></div></li>
-              <li><Gift size={24} color="#C05A46" className="shrink-0"/><div><strong>Kit Instalação <span className="line-through">R$ 149,00</span> (Grátis)</strong><span>Gabarito e buchas de alta fixação.</span></div></li>
-              <li><Shield size={24} color="#C05A46" className="shrink-0"/><div><strong>Garantia de 30 Dias</strong><span>Se não combinar, devolvemos seu dinheiro.</span></div></li>
-            </ul>
-          </div>
         </div>
+
       </div>
     </section>
   );
 };
 
-// ==========================================
-// SEÇÃO DE PRODUTOS COM CARROSSEL ARRASTÁVEL E BARRA
-// ==========================================
+const CardImageSlider = ({ produto }) => {
+  const imagensLista = produto.imagens || [produto.imagem];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextImage = (e) => {
+    e.stopPropagation(); 
+    e.preventDefault();
+    setCurrentIndex((prev) => (prev + 1) % imagensLista.length);
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setCurrentIndex((prev) => (prev === 0 ? imagensLista.length - 1 : prev - 1));
+  };
+
+  return (
+    <div className="product-image-wrapper">
+      {produto.tag && <span className="product-tag">{produto.tag}</span>}
+      <img src={imagensLista[currentIndex]} alt={produto.nome} className="product-image" loading="lazy" draggable="false" />
+      
+      {imagensLista.length > 1 && (
+        <div className="slider-controls">
+          <button className="inner-slider-arrow left" onClick={prevImage}><ChevronLeft size={16} /></button>
+          <button className="inner-slider-arrow right" onClick={nextImage}><ChevronRight size={16} /></button>
+          <div className="inner-slider-dots">
+            {imagensLista.map((_, idx) => (
+              <span key={idx} className={`dot ${idx === currentIndex ? 'active' : ''}`} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ProductGallery = ({ produtos, adicionarAoCarrinho }) => {
   const carouselRef = useRef(null);
   
-  // Estados para a funcionalidade de clique e arraste (Drag to scroll)
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const handleMouseDown = (e) => {
-    if (!carouselRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - carouselRef.current.offsetLeft);
-    setScrollLeft(carouselRef.current.scrollLeft);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging || !carouselRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Multiplicador da velocidade do arraste
-    carouselRef.current.scrollLeft = scrollLeft - walk;
+  const scroll = (direction) => {
+    if (carouselRef.current) {
+      const scrollAmount = 344; 
+      carouselRef.current.scrollBy({ 
+        left: direction === 'left' ? -scrollAmount : scrollAmount, 
+        behavior: 'smooth' 
+      });
+    }
   };
 
   return (
@@ -199,23 +272,18 @@ const ProductGallery = ({ produtos, adicionarAoCarrinho }) => {
           <p className="text-center text-muted">Nenhum produto cadastrado no momento.</p>
         ) : (
           <div className="carousel-wrapper">
-            <div 
-              className={`products-slider ${isDragging ? 'active' : ''}`} 
-              ref={carouselRef}
-              onMouseDown={handleMouseDown}
-              onMouseLeave={handleMouseLeave}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-            >
+            <button className="carousel-btn prev-btn" onClick={() => scroll('left')}>
+              <ChevronLeft size={24} />
+            </button>
+
+            <div className="products-slider" ref={carouselRef}>
               {produtos.map(produto => (
-                <div key={produto.id} className="product-card magic-border-wrapper">
-                  {/* O miolo que tampa a luz por dentro */}
+                /* === CARD COM BORDA BRILHANTE (GLOW) E CENTRALIZADO === */
+                <div key={produto.id} className="product-card glow-border-card">
+                  
                   <div className="magic-inner">
-                    <div className="product-image-wrapper">
-                      {produto.tag && <span className="product-tag">{produto.tag}</span>}
-                      {/* draggable="false" evita que o navegador tente salvar a imagem ao arrastar o carrossel */}
-                      <img src={produto.imagem} alt={produto.nome} className="product-image" loading="lazy" draggable="false" />
-                    </div>
+                    <CardImageSlider produto={produto} />
+                    
                     <div className="product-info">
                       <div className="stars">
                         <Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/>
@@ -226,6 +294,7 @@ const ProductGallery = ({ produtos, adicionarAoCarrinho }) => {
                       <p className={`estoque-texto ${produto.estoque > 0 ? 'em-estoque' : 'esgotado'}`}>
                         {produto.estoque > 0 ? `${produto.estoque} em estoque` : 'Esgotado'}
                       </p>
+                      
                       <button 
                         className="btn-buy" 
                         onClick={() => adicionarAoCarrinho(produto)}
@@ -238,6 +307,10 @@ const ProductGallery = ({ produtos, adicionarAoCarrinho }) => {
                 </div>
               ))}
             </div>
+
+            <button className="carousel-btn next-btn" onClick={() => scroll('right')}>
+              <ChevronRight size={24} />
+            </button>
           </div>
         )}
       </div>
@@ -257,7 +330,7 @@ const Testimonials = () => (
       </div>
       <div className="testimonials-grid">
         {DEPOIMENTOS.map(depoimento => (
-          <div key={depoimento.id} className="testimonial-card magic-border-wrapper">
+          <div key={depoimento.id} className="testimonial-card glow-border-card">
             <div className="magic-inner testimonial-inner">
               <Quote size={32} color="rgba(192, 90, 70, 0.1)" className="quote-icon" />
               <div className="stars mb-4"><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/></div>
@@ -312,9 +385,6 @@ const Footer = ({ setModoVisualizacao }) => (
   </footer>
 );
 
-// ==========================================
-// COMPONENTE PRINCIPAL
-// ==========================================
 export default function LandingPageQuadros() {
   const [modoVisualizacao, setModoVisualizacao] = useState('loja'); 
   const [produtos, setProdutos] = useState(() => {
@@ -364,7 +434,7 @@ export default function LandingPageQuadros() {
           <button className="btn-primary-large" onClick={() => setModoVisualizacao('loja')}>Voltar para Loja</button>
         </div>
       ) : (
-        <React.Fragment>
+        <div className="main-content-wrapper">
           <Header qtdCarrinho={quantidadeItens} abrirCarrinho={() => setIsCartOpen(true)} />
           <main>
             <Hero />
@@ -375,7 +445,7 @@ export default function LandingPageQuadros() {
             <FAQ />
           </main>
           <Footer setModoVisualizacao={setModoVisualizacao} />
-        </React.Fragment>
+        </div>
       )}
 
       {/* CARRINHO MODAL */}
@@ -391,7 +461,6 @@ export default function LandingPageQuadros() {
             </div>
             
             <div className="cart-body">
-              {/* PASSO 0: LISTA DE ITENS */}
               {checkoutStep === 0 && (
                 carrinho.length === 0 ? (
                   <div className="cart-empty">
@@ -402,7 +471,7 @@ export default function LandingPageQuadros() {
                   <div className="cart-items-list">
                     {carrinho.map(item => (
                       <div key={item.id} className="cart-item">
-                        <img src={item.imagem} alt={item.nome} className="cart-item-img" />
+                        <img src={(item.imagens && item.imagens.length > 0) ? item.imagens[0] : item.imagem} alt={item.nome} className="cart-item-img" />
                         <div className="cart-item-info">
                           <h4>{item.nome}</h4>
                           <p className="cart-item-price">{formatarPreco(item.preco)}</p>
@@ -415,7 +484,6 @@ export default function LandingPageQuadros() {
                 )
               )}
 
-              {/* PASSO 1: SIMULAÇÃO DE PAGAMENTO */}
               {checkoutStep === 1 && (
                 <div className="checkout-simulation">
                   <p className="checkout-total-display">Total a pagar: <strong>{formatarPreco(totalCarrinho)}</strong></p>
@@ -425,10 +493,7 @@ export default function LandingPageQuadros() {
                       <input type="radio" name="payment" defaultChecked />
                       <div className="payment-method-content">
                         <QrCode size={24} color="var(--terracota)" />
-                        <div>
-                          <strong>Pix</strong>
-                          <span>Aprovação imediata (5% de desconto)</span>
-                        </div>
+                        <div><strong>Pix</strong><span>Aprovação imediata (5% de desconto)</span></div>
                       </div>
                     </label>
 
@@ -436,10 +501,7 @@ export default function LandingPageQuadros() {
                       <input type="radio" name="payment" />
                       <div className="payment-method-content">
                         <CreditCard size={24} color="var(--terracota)" />
-                        <div>
-                          <strong>Cartão de Crédito</strong>
-                          <span>Até 12x sem juros</span>
-                        </div>
+                        <div><strong>Cartão de Crédito</strong><span>Até 12x sem juros</span></div>
                       </div>
                     </label>
                   </div>
@@ -455,7 +517,6 @@ export default function LandingPageQuadros() {
                 </div>
               )}
 
-              {/* PASSO 2: SUCESSO */}
               {checkoutStep === 2 && (
                 <div className="checkout-success">
                   <CheckCircle size={64} color="#5b6b4e" />
@@ -466,124 +527,140 @@ export default function LandingPageQuadros() {
               )}
             </div>
 
-            {/* FOOTER DO CARRINHO DINÂMICO */}
             <div className="cart-footer">
               {checkoutStep === 0 && carrinho.length > 0 && (
-                <React.Fragment>
+                <div className="cart-footer-actions">
                   <div className="cart-total"><span>Total:</span><span>{formatarPreco(totalCarrinho)}</span></div>
-                  <button className="btn-primary-large w-100" onClick={() => setCheckoutStep(1)}>
-                    Finalizar Compra Segura
-                  </button>
-                </React.Fragment>
+                  <button className="btn-primary-large w-100" onClick={() => setCheckoutStep(1)}>Finalizar Compra Segura</button>
+                </div>
               )}
               
               {checkoutStep === 1 && (
                 <div style={{display: 'flex', gap: '10px', flexDirection: 'column'}}>
-                  <button className="btn-primary-large w-100" onClick={() => setCheckoutStep(2)}>
-                    <ShieldCheck size={20} /> Confirmar Pagamento
-                  </button>
-                  <button className="btn-outline w-100" onClick={() => setCheckoutStep(0)}>
-                    Voltar ao Carrinho
-                  </button>
+                  <button className="btn-primary-large w-100" onClick={() => setCheckoutStep(2)}><ShieldCheck size={20} /> Confirmar Pagamento</button>
+                  <button className="btn-outline w-100" onClick={() => setCheckoutStep(0)}>Voltar ao Carrinho</button>
                 </div>
               )}
 
               {checkoutStep === 2 && (
-                <button className="btn-primary-large w-100" onClick={fecharCarrinho}>
-                  Continuar Navegando
-                </button>
+                <button className="btn-primary-large w-100" onClick={fecharCarrinho}>Continuar Navegando</button>
               )}
             </div>
           </div>
         </div>
       )}
 
-      {/* CSS 100% BLINDADO PARA MOBILE E COM BORDAS MÁGICAS SUTIS */}
+      {/* ========================================================================= */}
+      {/* CSS 100% BLINDADO E ESTRUTURADO                                           */}
+      {/* ========================================================================= */}
       <style dangerouslySetInnerHTML={{__html: `
-        /* RESET MATADOR DO VITE */
-        #root { 
-          max-width: 100% !important; 
-          width: 100% !important; 
-          margin: 0 !important; 
-          padding: 0 !important; 
-          display: block !important;
-          text-align: left !important;
-        }
-
-        :root {
-          --terracota: #c05a46;
-          --terracota-hover: #a34a38;
-          --olive: #5b6b4e;
-          --beige-bg: #f4f0ea;
-          --ivory-bg: #faf9f6;
-          --text-dark: #2d2b2a;
-          --text-muted: #858078;
-          --border-light: rgba(45, 43, 42, 0.1);
-        }
-
+        /* 1. RESET E VARIÁVEIS BASE */
+        #root { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; display: block !important; text-align: left !important; }
+        :root { --terracota: #c05a46; --terracota-hover: #a34a38; --olive: #5b6b4e; --beige-bg: #f4f0ea; --ivory-bg: #faf9f6; --text-dark: #2d2b2a; --text-muted: #858078; --border-light: rgba(45, 43, 42, 0.1); }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        
-        /* TRAVA CONTRA VAZAMENTO LATERAL */
         html, body { overflow-x: hidden; width: 100%; max-width: 100vw; background-color: var(--beige-bg); scroll-behavior: smooth; }
-        
-        /* WRAPPER EM BLOCK */
         .landing-page-wrapper { color: var(--text-dark); width: 100%; overflow-x: hidden; display: block; }
-        
-        /* O CONTAINER MÁGICO */
         .lp-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
 
-        /* UTLITÁRIOS */
-        .text-center { text-align: center; }
-        .text-muted { color: var(--text-muted); }
-        .justify-center { justify-content: center; }
-        .mb-4 { margin-bottom: 16px; }
-        .shrink-0 { flex-shrink: 0; }
-        .w-100 { width: 100%; }
-        .gold-text { color: var(--terracota); }
-        .line-through { text-decoration: line-through; font-size: 12px; color: var(--text-muted); }
+        .text-center { text-align: center; } .text-muted { color: var(--text-muted); } .justify-center { justify-content: center; } .mb-4 { margin-bottom: 16px; } .shrink-0 { flex-shrink: 0; } .w-100 { width: 100%; } .gold-text { color: var(--terracota); } .line-through { text-decoration: line-through; font-size: 12px; color: var(--text-muted); }
 
-        /* HEADER */
+        /* 2. DEFINIÇÃO DAS ANIMAÇÕES (Vibração e Cores) */
+        @keyframes moverCoresGradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes vibrarSutil {
+          0% { transform: translate(0, 0); }
+          25% { transform: translate(0.3px, 0.3px); }
+          50% { transform: translate(-0.3px, -0.3px); }
+          75% { transform: translate(0.3px, -0.3px); }
+          100% { transform: translate(0, 0); }
+        }
+
+        /* 3. ESTILO DOS BOTÕES (CORRIGIDOS E ANIMADOS) */
+        .btn-primary-large {
+          background: linear-gradient(270deg, var(--terracota), #df57df, #e1c070, var(--terracota));
+          background-size: 400% 400%;
+          color: #FFF;
+          border: none;
+          padding: 18px 40px;
+          font-size: 18px;
+          font-weight: bold;
+          border-radius: 6px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          animation: moverCoresGradient 8s ease infinite, vibrarSutil 0.8s ease-in-out infinite;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary-large:hover:not(:disabled) {
+          transform: scale(1.03) translateY(-2px);
+          box-shadow: 0 8px 25px rgba(192, 90, 70, 0.4);
+        }
+        .btn-primary-large:disabled { opacity: 0.5; cursor: not-allowed; animation: none; }
+
+        .btn-outline {
+          background: transparent;
+          border: 1px solid var(--terracota);
+          color: var(--terracota);
+          padding: 8px 20px;
+          border-radius: 4px;
+          font-weight: 600;
+          cursor: pointer;
+          animation: vibrarSutil 1.2s ease-in-out infinite;
+          transition: all 0.3s ease;
+        }
+        .btn-outline:hover { background: var(--terracota); color: #fff; }
+
+        .btn-buy {
+          margin-top: auto; 
+          width: 100%;
+          background: #fff;
+          border: 1px solid var(--terracota);
+          color: var(--terracota);
+          padding: 14px;
+          font-size: 16px;
+          font-weight: bold;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          animation: vibrarSutil 1s ease-in-out infinite;
+          transition: all 0.3s;
+        }
+        .btn-buy:hover:not(:disabled) {
+          background: linear-gradient(270deg, var(--terracota), #df57df, #e1c070, var(--terracota));
+          background-size: 400% 400%;
+          border-color: transparent;
+          color: #FFF;
+          animation: moverCoresGradient 4s ease infinite, vibrarSutil 0.4s ease-in-out infinite;
+        }
+        .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; animation: none; }
+
+
+        /* 4. HEADER & HERO VISUALS */
         .lp-header { background: rgba(250, 249, 246, 0.95); backdrop-filter: blur(10px); position: fixed; top: 0; width: 100%; z-index: 100; border-bottom: 1px solid var(--border-light); }
         .header-content { display: flex; justify-content: space-between; align-items: center; height: 70px; }
         .logo { font-size: clamp(20px, 5vw, 26px); font-weight: 800; color: var(--text-dark); } .logo span { color: var(--terracota); }
         .header-actions { display: flex; align-items: center; gap: 20px; }
-        .btn-outline { background: transparent; border: 1px solid var(--olive); color: var(--olive); padding: 8px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .btn-outline:hover { background: var(--olive); color: #FFF; }
         .cart-icon-wrapper { position: relative; cursor: pointer; display: flex; align-items: center; }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--terracota); color: #FFF; font-size: 11px; font-weight: bold; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 
-        /* HERO */
-        @keyframes panBackground {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); }
-        }
-        .hero-section { 
-          position: relative;
-          padding: clamp(120px, 15vh, 180px) 0 clamp(60px, 10vh, 100px); 
-          text-align: center; 
-          background: var(--text-dark); 
-          overflow: hidden;
-        }
-        .hero-bg-image {
-          position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-          background: url('https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
-          animation: panBackground 20s ease-in-out infinite;
-          z-index: 0;
-        }
-        .hero-overlay {
-          position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-          background: linear-gradient(to bottom, rgba(45,43,42,0.4), rgba(45,43,42,0.8));
-          z-index: 1;
-        }
+        @keyframes panBackground { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .hero-section { position: relative; padding: clamp(120px, 15vh, 180px) 0 clamp(60px, 10vh, 100px); text-align: center; background: var(--text-dark); overflow: hidden; }
+        .hero-bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover no-repeat; animation: panBackground 20s ease-in-out infinite; z-index: 0; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(45,43,42,0.4), rgba(45,43,42,0.8)); z-index: 1; }
         .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
-        
-        .badge-exclusive { background: rgba(192, 90, 70, 0.1); color: var(--terracota); border: 1px solid var(--terracota); padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; }
+        .badge-exclusive { background: rgba(192, 90, 70, 0.1); color: var(--terracota); border: 1px solid var(--terracota); padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; color: #FFF; }
         .hero-title { font-size: clamp(32px, 8vw, 56px); line-height: 1.1; margin-bottom: 24px; font-weight: 800; max-width: 900px; color: #FFF; }
         .hero-subtitle { font-size: clamp(16px, 4vw, 20px); color: rgba(255,255,255,0.8); margin-bottom: 40px; line-height: 1.5; max-width: 600px; }
-        .btn-primary-large { background: var(--terracota); color: #FFF; border: none; padding: 18px 40px; font-size: 18px; font-weight: bold; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: transform 0.2s; box-shadow: 0 10px 25px rgba(192, 90, 70, 0.2); }
-        .btn-primary-large:hover:not(:disabled) { transform: translateY(-3px); background: var(--terracota-hover); }
-        .btn-primary-large:disabled { opacity: 0.5; cursor: not-allowed; }
         .safe-checkout { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; font-size: 14px; color: rgba(255,255,255,0.6); }
 
         /* SHOWCASE */
@@ -597,9 +674,49 @@ export default function LandingPageQuadros() {
         .showcase-image { width: 100%; display: block; object-fit: cover; }
         .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; }
 
-        /* OFFER */
+        /* ==========================================
+           5. BORDAS MÁGICAS COM BRILHO (GLOW)
+        ========================================== */
         .offer-section { padding: 50px 0; background: var(--beige-bg); }
-        .offer-card { background: #FFF; border: 1px solid var(--border-light); border-radius: 16px; padding: clamp(30px, 5vw, 48px); display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+
+        @keyframes animarBordaBrilhante {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        /* Envoltório da Luz */
+        .glow-wrapper {
+          position: relative;
+          padding: 1.5px; 
+          border-radius: 18px;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        .glow-border-offer { margin: 10px; }
+
+        /* O feixe de cor */
+        .glow-wrapper::before, .glow-wrapper::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          border-radius: 18px;
+          background: linear-gradient(90deg, var(--terracota), #df57df, #e1c070, var(--terracota));
+          background-size: 300% 300%;
+          animation: moverCoresGradient 6s linear infinite;
+          z-index: -2;
+        }
+
+        /* O BLUR QUE GERA O GLOW */
+        .glow-wrapper::after { filter: blur(12px); opacity: 0.7; }
+        .glow-wrapper:hover::after { opacity: 1; filter: blur(16px); } 
+
+        /* O interior do card */
+        .glow-inner { background: #FFF; border-radius: 16.5px; position: relative; z-index: 1; }
+        
+        /* CONTEÚDO DA OFERTA */
+        .offer-card-inner { padding: clamp(30px, 5vw, 48px); display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: center; }
         .offer-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(192, 90, 70, 0.1); color: var(--terracota); padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 20px; }
         .offer-title { font-size: clamp(28px, 5vw, 36px); font-weight: bold; line-height: 1.2; margin-bottom: 16px; color: var(--text-dark); }
         .offer-desc { color: var(--text-muted); margin-bottom: 30px; line-height: 1.5; }
@@ -614,125 +731,66 @@ export default function LandingPageQuadros() {
         .offer-benefits-list span { color: var(--text-muted); font-size: 15px; }
 
         /* ==========================================
-           BORDAS MÁGICAS (SUTIS E FINAS)
+           PRODUTOS E CARROSSEL HORIZONTAL (CENTRALIZADO)
         ========================================== */
-        @keyframes spinMagic {
-          0% { transform: translate(-50%, -50%) rotate(0deg); }
-          100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .magic-border-wrapper {
-          position: relative;
-          /* ESPESSURA BEM FINA E CHIQUE (1.5px) */
-          padding: 1.5px; 
-          border-radius: 16px;
-          z-index: 1;
-          display: flex; 
-          flex-direction: column;
-          background: var(--border-light); 
-          box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          /* overflow hidden para que a luz não vaze, fique apenas um filete exato */
-          overflow: hidden;
-        }
-
-        .magic-border-wrapper:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 15px 35px rgba(192, 90, 70, 0.15); 
-        }
-
-        /* O elemento giratório que faz a luz circular */
-        .magic-border-wrapper::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 200%;
-          height: 200%;
-          background: conic-gradient(
-            from 0deg, 
-            transparent 70%, 
-            rgba(192, 90, 70, 0.1) 80%, 
-            var(--terracota) 95%, 
-            #e1c070 100%
-          );
-          /* MOVIMENTO SUTIL E LENTO */
-          animation: spinMagic 6s linear infinite;
-          z-index: -1;
-          transform: translate(-50%, -50%);
-        }
-
-        /* O fundo branco do cartão que esconde o interior do gradiente */
-        .magic-inner {
-          background: #FFF;
-          border-radius: 14.5px; 
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          position: relative;
-          z-index: 1;
-        }
-
-        /* ==========================================
-           PRODUTOS E CARROSSEL DE ARRASTAR
-        ========================================== */
-        .gallery-section { padding: 80px 0; background: var(--ivory-bg); border-top: 1px solid var(--border-light); overflow: hidden; }
-        .carousel-outer-container { max-width: 1400px; margin: 0 auto; padding: 0 40px; position: relative; }
+        .gallery-section { padding: 80px 0; background: var(--ivory-bg); overflow: hidden; }
+        .carousel-outer-container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         .section-title { text-align: center; font-size: clamp(28px, 6vw, 36px); margin-bottom: 40px; font-weight: 800; color: var(--text-dark); }
         .carousel-wrapper { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
         
+        .carousel-btn { position: absolute; z-index: 10; top: calc(50% - 20px); background: #FFF; border: 1px solid var(--border-light); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--terracota); box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; }
+        .carousel-btn:hover { background: var(--terracota); color: #FFF; border-color: var(--terracota); transform: scale(1.1); }
+        .carousel-btn.prev-btn { left: 0px; } .carousel-btn.next-btn { right: 0px; }
+
+        /* O Segredo para Centralizar os Cards */
         .products-slider { 
-          display: flex; gap: 24px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory;
-          padding: 10px 10px 40px 10px; /* Padding bottom gigante para afastar a barra de rolagem */
-          width: 100%;
-          cursor: grab;
-          scrollbar-width: thin;
-          scrollbar-color: var(--terracota) rgba(45, 43, 42, 0.1);
+          display: flex; gap: 28px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; 
+          padding: 15px 10px 45px 10px; width: 100%; 
+          align-items: stretch; /* Alturas iguais */
+          justify-content: center; /* CENTRALIZA OS CARDS SE HOUVER POUCOS */
+          -webkit-overflow-scrolling: touch; 
         }
-
-        .products-slider.active {
-          cursor: grabbing;
-          scroll-snap-type: none; /* Solta os cards para um arraste natural */
-          scroll-behavior: auto; /* Acompanha o mouse perfeitamente */
-        }
-
-        /* BARRA DE ROLAGEM HORIZONTAL E INFERIOR */
-        .products-slider::-webkit-scrollbar { height: 8px; display: block; }
-        .products-slider::-webkit-scrollbar-track { background: rgba(45, 43, 42, 0.08); border-radius: 10px; margin: 0 10vw; }
+        
+        .products-slider::-webkit-scrollbar { height: 10px; display: block; }
+        .products-slider::-webkit-scrollbar-track { background: rgba(45, 43, 42, 0.05); border-radius: 10px; margin: 0 40px; }
         .products-slider::-webkit-scrollbar-thumb { background: var(--terracota); border-radius: 10px; cursor: pointer; }
         .products-slider::-webkit-scrollbar-thumb:hover { background: var(--terracota-hover); }
         
-        .product-card { 
-          min-width: 350px; flex: 0 0 auto; scroll-snap-align: start; 
-          user-select: none; /* Evita que o usuário selecione texto enquanto arrasta */
-        }
-        
-        .product-image-wrapper { position: relative; height: 350px; overflow: hidden; pointer-events: none; }
+        /* CARD DA GALERIA */
+        .glow-border-card { flex: 0 0 auto; width: 320px; scroll-snap-align: start; transition: transform 0.3s ease; }
+        .glow-border-card:hover { transform: translateY(-5px); }
+        .card-inner-flex { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+        .product-image-wrapper { position: relative; height: 350px; overflow: hidden; flex-shrink: 0; cursor: pointer; }
         .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
-        .magic-border-wrapper:hover .product-image { transform: scale(1.05); }
-        
+        .glow-border-card:hover .product-image { transform: scale(1.05); }
         .product-tag { position: absolute; top: 16px; left: 16px; background: var(--olive); color: #FFF; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 6px; z-index: 10; }
-        .product-info { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; pointer-events: auto; }
+        
+        .inner-slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-dark); opacity: 0; transition: opacity 0.3s; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .product-image-wrapper:hover .inner-slider-arrow { opacity: 1; }
+        .inner-slider-arrow.left { left: 8px; } .inner-slider-arrow.right { right: 8px; }
+        .inner-slider-arrow:hover { background: #FFF; }
+        .inner-slider-dots { position: absolute; bottom: 12px; left: 0; width: 100%; display: flex; justify-content: center; gap: 5px; z-index: 20;}
+        .inner-slider-dots .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: 0.3s; }
+        .inner-slider-dots .dot.active { background: #FFF; transform: scale(1.3); }
+
+        .product-info { padding: 30px; flex: 1; display: flex; flex-direction: column; }
         .stars { display: flex; gap: 2px; margin-bottom: 12px; }
         .product-name { font-size: 20px; margin-bottom: 8px; color: var(--text-dark); font-weight: 600; }
         .product-price { font-size: 24px; font-weight: bold; color: var(--terracota); margin-bottom: 4px; }
         .product-installments { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
         .estoque-texto { font-size: 13px; margin-bottom: 16px; }
         .em-estoque { color: var(--olive); } .esgotado { color: var(--terracota); }
-        
-        .btn-buy { width: 100%; background: transparent; border: 1px solid var(--border-light); color: var(--text-dark); padding: 14px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; transition: 0.3s; }
-        .btn-buy:hover:not(:disabled) { background: var(--terracota); border-color: var(--terracota); color: #FFF; }
 
         /* TESTIMONIALS & FAQ */
         .testimonials-section { padding: 80px 0; background: var(--beige-bg); }
         .faq-section { padding: 80px 0; background: var(--ivory-bg); border-top: 1px solid var(--border-light); }
         .testimonials-header p { text-align: center; color: var(--text-muted); margin-top: 10px; }
-        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 40px; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; align-items: stretch; padding: 15px 0;}
         
-        .testimonial-inner { padding: 30px; position: relative; } 
+        .testimonial-inner { padding: 30px; position: relative; flex: 1; display: flex; flex-direction: column; } 
         .quote-icon { position: absolute; top: 20px; right: 20px; opacity: 0.1; }
-        .testimonial-text { color: var(--text-dark); font-size: 16px; line-height: 1.6; font-style: italic; margin-bottom: 24px; }
+        .testimonial-text { color: var(--text-dark); font-size: 16px; line-height: 1.6; font-style: italic; margin-bottom: 24px; flex-grow: 1; }
         .testimonial-author { display: flex; align-items: center; gap: 16px; }
         .author-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--terracota); }
         .author-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; color: var(--text-dark); }
@@ -750,87 +808,44 @@ export default function LandingPageQuadros() {
         /* FOOTER */
         .lp-footer { background: var(--olive); padding: 60px 0 20px; color: #FFF; }
         .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; }
-        .footer-brand h2 { color: #FFF; }
-        .footer-brand span { color: var(--beige-bg); }
-        .footer-brand p { color: rgba(255,255,255,0.7); margin-top: 8px; }
-        .footer-links { display: flex; gap: 24px; }
-        .footer-links a { color: #FFF; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
-        .footer-links a:hover { color: var(--terracota); }
+        .footer-brand h2 { color: #FFF; } .footer-brand span { color: var(--beige-bg); } .footer-brand p { color: rgba(255,255,255,0.7); margin-top: 8px; }
+        .footer-links { display: flex; gap: 24px; } .footer-links a { color: #FFF; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; } .footer-links a:hover { color: var(--terracota); }
         .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); font-size: 14px; flex-wrap: wrap; gap: 16px;}
         .admin-btn-link { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        /* CART MODAL & CHECKOUT SIMULATION */
+        /* CART MODAL */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 999; display: flex; justify-content: flex-end; }
         .cart-sidebar { width: 100%; max-width: 450px; background: var(--ivory-bg); height: 100%; display: flex; flex-direction: column; border-left: 1px solid var(--border-light); box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
         .cart-header { padding: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); }
-        .cart-header h2 { color: var(--text-dark); font-size: 20px; }
-        .btn-close-cart { background: none; border: none; cursor: pointer; color: var(--text-dark); }
+        .cart-header h2 { color: var(--text-dark); font-size: 20px; } .btn-close-cart { background: none; border: none; cursor: pointer; color: var(--text-dark); }
         .cart-body { padding: 24px; flex-grow: 1; overflow-y: auto; }
-        
         .cart-item { display: flex; gap: 16px; background: #FFF; padding: 12px; border-radius: 8px; margin-bottom: 16px; align-items: center; border: 1px solid var(--border-light); }
-        .cart-item-img { width: 70px; height: 70px; border-radius: 6px; object-fit: cover; }
-        .cart-item-info { flex-grow: 1; }
-        .cart-item-info h4 { font-size: 14px; margin-bottom: 4px; color: var(--text-dark); }
-        .cart-item-price { color: var(--terracota); font-weight: bold; margin-bottom: 4px;}
-        .cart-item-qty { font-size: 12px; color: var(--text-muted); }
-        .btn-remove-item { background: none; border: none; padding: 8px; cursor: pointer; }
+        .cart-item-img { width: 70px; height: 70px; border-radius: 6px; object-fit: cover; } .cart-item-info { flex-grow: 1; } .cart-item-info h4 { font-size: 14px; margin-bottom: 4px; color: var(--text-dark); } .cart-item-price { color: var(--terracota); font-weight: bold; margin-bottom: 4px;} .cart-item-qty { font-size: 12px; color: var(--text-muted); } .btn-remove-item { background: none; border: none; padding: 8px; cursor: pointer; }
         
         .cart-footer { padding: 24px; border-top: 1px solid var(--border-light); background: #FFF; }
         .cart-total { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; margin-bottom: 24px; color: var(--text-dark); }
-
         .checkout-total-display { font-size: 18px; margin-bottom: 24px; text-align: center; background: rgba(192, 90, 70, 0.05); padding: 12px; border-radius: 8px; border: 1px dashed var(--terracota); color: var(--text-dark); }
-        .payment-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-        .payment-method-card { background: #FFF; border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
-        .payment-method-card:hover { border-color: var(--olive); }
-        .payment-method-card input[type="radio"] { accent-color: var(--terracota); width: 18px; height: 18px; cursor: pointer; }
-        .payment-method-content { display: flex; align-items: center; gap: 16px; }
-        .payment-method-content strong { display: block; font-size: 15px; margin-bottom: 4px; color: var(--text-dark); }
-        .payment-method-content span { display: block; font-size: 12px; color: var(--text-muted); }
-        
-        .fake-form { display: flex; flex-direction: column; gap: 12px; }
-        .fake-input { width: 100%; padding: 12px 16px; background: #FFF; border: 1px solid var(--border-light); border-radius: 6px; color: var(--text-dark); font-size: 14px; outline: none; transition: 0.3s; }
-        .fake-input:focus { border-color: var(--olive); box-shadow: 0 0 0 3px rgba(91, 107, 78, 0.1); }
-        
-        .checkout-success { text-align: center; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-        .checkout-success h3 { font-size: 24px; color: var(--olive); }
-        .checkout-success p { color: var(--text-muted); line-height: 1.5; }
-        .order-number { background: var(--beige-bg); padding: 8px 16px; border-radius: 20px; font-weight: bold; color: var(--text-dark) !important; margin-top: 16px; }
+        .payment-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; } .payment-method-card { background: #FFF; border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; } .payment-method-card:hover { border-color: var(--olive); } .payment-method-card input[type="radio"] { accent-color: var(--terracota); width: 18px; height: 18px; cursor: pointer; } .payment-method-content { display: flex; align-items: center; gap: 16px; } .payment-method-content strong { display: block; font-size: 15px; margin-bottom: 4px; color: var(--text-dark); } .payment-method-content span { display: block; font-size: 12px; color: var(--text-muted); }
+        .fake-form { display: flex; flex-direction: column; gap: 12px; } .fake-input { width: 100%; padding: 12px 16px; background: #FFF; border: 1px solid var(--border-light); border-radius: 6px; color: var(--text-dark); font-size: 14px; outline: none; transition: 0.3s; } .fake-input:focus { border-color: var(--olive); box-shadow: 0 0 0 3px rgba(91, 107, 78, 0.1); }
+        .checkout-success { text-align: center; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 16px; } .checkout-success h3 { font-size: 24px; color: var(--olive); } .checkout-success p { color: var(--text-muted); line-height: 1.5; } .order-number { background: var(--beige-bg); padding: 8px 16px; border-radius: 20px; font-weight: bold; color: var(--text-dark) !important; margin-top: 16px; }
 
-        /* MAGIA DA RESPONSIVIDADE MOBILE */
+        /* RESPONSIVIDADE MOBILE */
         @media (max-width: 1024px) {
-          .showcase-grid { grid-template-columns: 1fr; text-align: center; }
-          .showcase-title { text-align: center; }
-          .benefits-list { align-items: center; }
-          .benefits-list li { text-align: left; }
-          .showcase-media-wrapper { order: -1; max-width: 700px; margin: 0 auto; }
-          .offer-card { grid-template-columns: 1fr; text-align: center; }
-          .offer-benefits-list { align-items: center; }
-          .offer-benefits-list li { text-align: left; }
-          .countdown-timer { justify-content: center; }
+          .showcase-grid { grid-template-columns: 1fr; text-align: center; } .showcase-title { text-align: center; } .benefits-list { align-items: center; } .benefits-list li { text-align: left; } .showcase-media-wrapper { order: -1; max-width: 700px; margin: 0 auto; } .offer-card-inner { grid-template-columns: 1fr; text-align: center; } .offer-benefits-list { align-items: center; } .offer-benefits-list li { text-align: left; } .countdown-timer { justify-content: center; }
         }
 
         @media (max-width: 768px) {
-          .header-btn-desk { display: none; } 
-          .countdown-box { min-width: 70px; padding: 10px; }
-          .countdown-num { font-size: 22px; }
-          .footer-content { flex-direction: column; text-align: center; justify-content: center; }
-          .footer-bottom { flex-direction: column; justify-content: center; }
-          
-          .carousel-outer-container { padding: 0 20px; }
-          .product-card { min-width: 300px; }
-          
-          /* FAZENDO A BARRA INFERIOR APARECER CLARAMENTE NO CELULAR */
-          .products-slider::-webkit-scrollbar { display: block; height: 6px; }
-          .products-slider::-webkit-scrollbar-track { margin: 0 10px; }
+          .header-btn-desk { display: none; } .countdown-box { min-width: 70px; padding: 10px; } .countdown-num { font-size: 22px; } .footer-content { flex-direction: column; text-align: center; justify-content: center; } .footer-bottom { flex-direction: column; justify-content: center; } .carousel-outer-container { padding: 0 10px; } 
+          .carousel-btn { display: none; } 
+          /* Força a barra de rolagem aparecer no celular para o usuário saber que pode arrastar */
+          .products-slider { justify-content: flex-start; } /* No mobile os cards começam na esquerda */
+          .products-slider::-webkit-scrollbar { display: block; height: 6px; } .products-slider::-webkit-scrollbar-track { margin: 0 10px; }
         }
-        
+
         @media (max-width: 480px) {
-          .countdown-timer { flex-wrap: wrap; }
-          .product-image-wrapper { height: 250px; }
-          .product-card { min-width: 280px; }
+          .countdown-timer { flex-wrap: wrap; } .product-image-wrapper { height: 250px; } .product-card { min-width: 280px; width: 280px;}
         }
       `}} />
-
     </div>
   );
 }
