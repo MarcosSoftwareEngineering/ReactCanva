@@ -73,7 +73,7 @@ const PRODUTOS_INICIAIS = [
 
 const DEPOIMENTOS = [
   { id: 1, nome: "Carolina Mendes", papel: "Arquiteta de Interiores", texto: "Os quadros da Lumina Art elevaram o nível dos meus projetos. A qualidade da impressão é impecável.", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
-  { id: 2, nome: "Roberto Almeida", papel: "Cliente Verificado", texto: "Comprei o 'Minimalismo Geométrico' para meu escritório e superou todas as expectativas.", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
+  { id: 2, nome: "Roberto Almeida", papel: "Cliente Verificado", texto: "Comprei o 'Minimalismo Geométrico' para meu escritório e superou todas as expectativas. Recomendo muito!", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
   { id: 3, nome: "Juliana Silva", papel: "Decoradora", texto: "A textura da tela canvas dá uma sensação de pintura original maravilhosa. Recomendo de olhos fechados.", avatar: "https://randomuser.me/api/portraits/women/68.jpg" }
 ];
 
@@ -187,7 +187,7 @@ const IrresistibleOffer = () => {
       <div className="lp-container">
         
         {/* === CARD COM BORDA BRILHANTE (GLOW EMITIDO) === */}
-        <div className="glow-wrapper">
+        <div className="glow-wrapper offer-card-margin">
           <div className="glow-inner offer-card-inner">
             <div className="offer-left">
               <div className="offer-badge"><Clock size={16} /> Oferta por Tempo Limitado</div>
@@ -237,11 +237,17 @@ const CardImageSlider = ({ produto }) => {
       
       {imagensLista.length > 1 && (
         <div className="slider-controls">
-          <button className="inner-slider-arrow left" onClick={prevImage}><ChevronLeft size={16} /></button>
-          <button className="inner-slider-arrow right" onClick={nextImage}><ChevronRight size={16} /></button>
           <div className="inner-slider-dots">
             {imagensLista.map((_, idx) => (
-              <span key={idx} className={`dot ${idx === currentIndex ? 'active' : ''}`} />
+              <span 
+                key={idx} 
+                className={`dot ${idx === currentIndex ? 'active' : ''}`} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  setCurrentIndex(idx);
+                }}
+              />
             ))}
           </div>
         </div>
@@ -278,12 +284,9 @@ const ProductGallery = ({ produtos, adicionarAoCarrinho }) => {
 
             <div className="products-slider" ref={carouselRef}>
               {produtos.map(produto => (
-                /* === CARD COM BORDA BRILHANTE (GLOW) E CENTRALIZADO === */
-                <div key={produto.id} className="product-card glow-border-card">
-                  
-                  <div className="magic-inner">
+                <div key={produto.id} className="product-card glow-wrapper">
+                  <div className="glow-inner card-inner-flex">
                     <CardImageSlider produto={produto} />
-                    
                     <div className="product-info">
                       <div className="stars">
                         <Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/><Star size={16} fill="#C05A46" color="#C05A46"/>
@@ -318,34 +321,81 @@ const ProductGallery = ({ produtos, adicionarAoCarrinho }) => {
   );
 };
 
-const Testimonials = () => (
-  <section className="testimonials-section">
-    <div className="lp-container">
-      <div className="testimonials-header">
-        <h2 className="section-title">Aprovado por quem exige o melhor</h2>
-        <div className="trust-badge-header">
-          <div className="stars justify-center"><Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/></div>
-          <p>Classificação <strong>4.9/5</strong> baseada em +500 clientes.</p>
+// ==========================================
+// NOVO CARROSSEL DE DEPOIMENTOS (1 CARD + AUTO-PLAY 2 SEG)
+// ==========================================
+const Testimonials = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Loop Infinito a cada 2 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % DEPOIMENTOS.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const nextTestimonial = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % DEPOIMENTOS.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? DEPOIMENTOS.length - 1 : prevIndex - 1));
+  };
+
+  const depoimentoAtual = DEPOIMENTOS[currentIndex];
+
+  return (
+    <section className="testimonials-section">
+      <div className="lp-container">
+        <div className="testimonials-header">
+          <h2 className="section-title">Aprovado por quem exige o melhor</h2>
+          <div className="trust-badge-header">
+            <div className="stars justify-center">
+              <Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/><Star size={24} fill="#C05A46" color="#C05A46"/>
+            </div>
+            <p>Classificação <strong>4.9/5</strong> baseada em +500 clientes.</p>
+          </div>
         </div>
-      </div>
-      <div className="testimonials-grid">
-        {DEPOIMENTOS.map(depoimento => (
-          <div key={depoimento.id} className="testimonial-card glow-border-card">
-            <div className="magic-inner testimonial-inner">
-              <Quote size={32} color="rgba(192, 90, 70, 0.1)" className="quote-icon" />
-              <div className="stars mb-4"><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/></div>
-              <p className="testimonial-text">"{depoimento.texto}"</p>
-              <div className="testimonial-author">
-                <img src={depoimento.avatar} alt={depoimento.nome} className="author-avatar" />
-                <div><h4 className="author-name">{depoimento.nome}</h4><p className="author-role">{depoimento.papel}</p></div>
+        
+        {/* Envoltório do Carrossel de Depoimentos */}
+        <div className="carousel-wrapper testimonial-carousel-container">
+          
+          {/* Botão Voltar */}
+          <button className="carousel-btn prev-btn force-flex" onClick={prevTestimonial}>
+            <ChevronLeft size={24} />
+          </button>
+
+          {/* O Card Único que muda de dados */}
+          <div className="testimonial-single-wrapper">
+            <div className="testimonial-card glow-wrapper">
+              <div className="glow-inner testimonial-inner">
+                <Quote size={32} color="rgba(192, 90, 70, 0.1)" className="quote-icon" />
+                <div className="stars mb-4">
+                  <Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/><Star size={14} fill="#C05A46" color="#C05A46"/>
+                </div>
+                <p className="testimonial-text">"{depoimentoAtual.texto}"</p>
+                <div className="testimonial-author">
+                  <img src={depoimentoAtual.avatar} alt={depoimentoAtual.nome} className="author-avatar" />
+                  <div>
+                    <h4 className="author-name">{depoimentoAtual.nome}</h4>
+                    <p className="author-role">{depoimentoAtual.papel}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        ))}
+
+          {/* Botão Avançar */}
+          <button className="carousel-btn next-btn force-flex" onClick={nextTestimonial}>
+            <ChevronRight size={24} />
+          </button>
+
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -551,7 +601,7 @@ export default function LandingPageQuadros() {
       )}
 
       {/* ========================================================================= */}
-      {/* CSS 100% BLINDADO E ESTRUTURADO                                           */}
+      {/* CSS BLINDADO E ESTRUTURADO                                                */}
       {/* ========================================================================= */}
       <style dangerouslySetInnerHTML={{__html: `
         /* 1. RESET E VARIÁVEIS BASE */
@@ -579,69 +629,20 @@ export default function LandingPageQuadros() {
           100% { transform: translate(0, 0); }
         }
 
-        /* 3. ESTILO DOS BOTÕES (CORRIGIDOS E ANIMADOS) */
+        /* 3. ESTILO DOS BOTÕES */
         .btn-primary-large {
           background: linear-gradient(270deg, var(--terracota), #df57df, #e1c070, var(--terracota));
-          background-size: 400% 400%;
-          color: #FFF;
-          border: none;
-          padding: 18px 40px;
-          font-size: 18px;
-          font-weight: bold;
-          border-radius: 6px;
-          cursor: pointer;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-          animation: moverCoresGradient 8s ease infinite, vibrarSutil 0.8s ease-in-out infinite;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          background-size: 400% 400%; color: #FFF; border: none; padding: 18px 40px; font-size: 18px; font-weight: bold; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          animation: moverCoresGradient 8s ease infinite, vibrarSutil 0.8s ease-in-out infinite; transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .btn-primary-large:hover:not(:disabled) {
-          transform: scale(1.03) translateY(-2px);
-          box-shadow: 0 8px 25px rgba(192, 90, 70, 0.4);
-        }
+        .btn-primary-large:hover:not(:disabled) { transform: scale(1.03) translateY(-2px); box-shadow: 0 8px 25px rgba(192, 90, 70, 0.4); }
         .btn-primary-large:disabled { opacity: 0.5; cursor: not-allowed; animation: none; }
 
-        .btn-outline {
-          background: transparent;
-          border: 1px solid var(--terracota);
-          color: var(--terracota);
-          padding: 8px 20px;
-          border-radius: 4px;
-          font-weight: 600;
-          cursor: pointer;
-          animation: vibrarSutil 1.2s ease-in-out infinite;
-          transition: all 0.3s ease;
-        }
+        .btn-outline { background: transparent; border: 1px solid var(--terracota); color: var(--terracota); padding: 8px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; animation: vibrarSutil 1.2s ease-in-out infinite; transition: all 0.3s ease; }
         .btn-outline:hover { background: var(--terracota); color: #fff; }
 
-        .btn-buy {
-          margin-top: auto; 
-          width: 100%;
-          background: #fff;
-          border: 1px solid var(--terracota);
-          color: var(--terracota);
-          padding: 14px;
-          font-size: 16px;
-          font-weight: bold;
-          border-radius: 8px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          animation: vibrarSutil 1s ease-in-out infinite;
-          transition: all 0.3s;
-        }
-        .btn-buy:hover:not(:disabled) {
-          background: linear-gradient(270deg, var(--terracota), #df57df, #e1c070, var(--terracota));
-          background-size: 400% 400%;
-          border-color: transparent;
-          color: #FFF;
-          animation: moverCoresGradient 4s ease infinite, vibrarSutil 0.4s ease-in-out infinite;
-        }
+        .btn-buy { margin-top: auto; width: 100%; background: #fff; border: 1px solid var(--terracota); color: var(--terracota); padding: 14px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; animation: vibrarSutil 1s ease-in-out infinite; transition: all 0.3s; }
+        .btn-buy:hover:not(:disabled) { background: linear-gradient(270deg, var(--terracota), #df57df, #e1c070, var(--terracota)); background-size: 400% 400%; border-color: transparent; color: #FFF; animation: moverCoresGradient 4s ease infinite, vibrarSutil 0.4s ease-in-out infinite; }
         .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; animation: none; }
 
 
@@ -685,37 +686,21 @@ export default function LandingPageQuadros() {
           100% { background-position: 0% 50%; }
         }
 
-        /* Envoltório da Luz */
-        .glow-wrapper {
-          position: relative;
-          padding: 1.5px; 
-          border-radius: 18px;
-          z-index: 1;
-          display: flex;
-          flex-direction: column;
-        }
-        .glow-border-offer { margin: 10px; }
+        .glow-wrapper { position: relative; padding: 1.5px; border-radius: 18px; z-index: 1; display: flex; flex-direction: column; }
+        .offer-card-margin { margin: 10px; }
 
-        /* O feixe de cor */
         .glow-wrapper::before, .glow-wrapper::after {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          border-radius: 18px;
+          content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 18px;
           background: linear-gradient(90deg, var(--terracota), #df57df, #e1c070, var(--terracota));
-          background-size: 300% 300%;
-          animation: moverCoresGradient 6s linear infinite;
-          z-index: -2;
+          background-size: 300% 300%; animation: moverCoresGradient 6s linear infinite; z-index: -2;
         }
 
-        /* O BLUR QUE GERA O GLOW */
         .glow-wrapper::after { filter: blur(12px); opacity: 0.7; }
         .glow-wrapper:hover::after { opacity: 1; filter: blur(16px); } 
 
-        /* O interior do card */
         .glow-inner { background: #FFF; border-radius: 16.5px; position: relative; z-index: 1; }
-        
-        /* CONTEÚDO DA OFERTA */
+        .card-inner-flex { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
         .offer-card-inner { padding: clamp(30px, 5vw, 48px); display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: center; }
         .offer-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(192, 90, 70, 0.1); color: var(--terracota); padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 20px; }
         .offer-title { font-size: clamp(28px, 5vw, 36px); font-weight: bold; line-height: 1.2; margin-bottom: 16px; color: var(--text-dark); }
@@ -731,47 +716,33 @@ export default function LandingPageQuadros() {
         .offer-benefits-list span { color: var(--text-muted); font-size: 15px; }
 
         /* ==========================================
-           PRODUTOS E CARROSSEL HORIZONTAL (CENTRALIZADO)
+           PRODUTOS E CARROSSEL HORIZONTAL
         ========================================== */
         .gallery-section { padding: 80px 0; background: var(--ivory-bg); overflow: hidden; }
         .carousel-outer-container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         .section-title { text-align: center; font-size: clamp(28px, 6vw, 36px); margin-bottom: 40px; font-weight: 800; color: var(--text-dark); }
-        .carousel-wrapper { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .carousel-wrapper { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; }
         
-        .carousel-btn { position: absolute; z-index: 10; top: calc(50% - 20px); background: #FFF; border: 1px solid var(--border-light); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--terracota); box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; }
+        .carousel-btn { position: absolute; z-index: 10; background: #FFF; border: 1px solid var(--border-light); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--terracota); box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; }
         .carousel-btn:hover { background: var(--terracota); color: #FFF; border-color: var(--terracota); transform: scale(1.1); }
         .carousel-btn.prev-btn { left: 0px; } .carousel-btn.next-btn { right: 0px; }
 
-        /* O Segredo para Centralizar os Cards */
-        .products-slider { 
-          display: flex; gap: 28px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; 
-          padding: 15px 10px 45px 10px; width: 100%; 
-          align-items: stretch; /* Alturas iguais */
-          justify-content: center; /* CENTRALIZA OS CARDS SE HOUVER POUCOS */
-          -webkit-overflow-scrolling: touch; 
-        }
-        
+        .products-slider { display: flex; gap: 28px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding: 15px 10px 45px 10px; width: 100%; align-items: stretch; justify-content: center; -webkit-overflow-scrolling: touch; }
         .products-slider::-webkit-scrollbar { height: 10px; display: block; }
         .products-slider::-webkit-scrollbar-track { background: rgba(45, 43, 42, 0.05); border-radius: 10px; margin: 0 40px; }
         .products-slider::-webkit-scrollbar-thumb { background: var(--terracota); border-radius: 10px; cursor: pointer; }
         .products-slider::-webkit-scrollbar-thumb:hover { background: var(--terracota-hover); }
         
-        /* CARD DA GALERIA */
-        .glow-border-card { flex: 0 0 auto; width: 320px; scroll-snap-align: start; transition: transform 0.3s ease; }
-        .glow-border-card:hover { transform: translateY(-5px); }
-        .card-inner-flex { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .product-card { flex: 0 0 auto; width: 320px; scroll-snap-align: start; transition: transform 0.3s ease; }
+        .product-card:hover { transform: translateY(-5px); }
 
         .product-image-wrapper { position: relative; height: 350px; overflow: hidden; flex-shrink: 0; cursor: pointer; }
         .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
         .glow-border-card:hover .product-image { transform: scale(1.05); }
         .product-tag { position: absolute; top: 16px; left: 16px; background: var(--olive); color: #FFF; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 6px; z-index: 10; }
         
-        .inner-slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-dark); opacity: 0; transition: opacity 0.3s; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .product-image-wrapper:hover .inner-slider-arrow { opacity: 1; }
-        .inner-slider-arrow.left { left: 8px; } .inner-slider-arrow.right { right: 8px; }
-        .inner-slider-arrow:hover { background: #FFF; }
         .inner-slider-dots { position: absolute; bottom: 12px; left: 0; width: 100%; display: flex; justify-content: center; gap: 5px; z-index: 20;}
-        .inner-slider-dots .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: 0.3s; }
+        .inner-slider-dots .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: 0.3s; cursor: pointer; }
         .inner-slider-dots .dot.active { background: #FFF; transform: scale(1.3); }
 
         .product-info { padding: 30px; flex: 1; display: flex; flex-direction: column; }
@@ -782,20 +753,27 @@ export default function LandingPageQuadros() {
         .estoque-texto { font-size: 13px; margin-bottom: 16px; }
         .em-estoque { color: var(--olive); } .esgotado { color: var(--terracota); }
 
-        /* TESTIMONIALS & FAQ */
+        /* ==========================================
+           NOVO: DEPOIMENTOS EM CARROSSEL
+        ========================================== */
         .testimonials-section { padding: 80px 0; background: var(--beige-bg); }
-        .faq-section { padding: 80px 0; background: var(--ivory-bg); border-top: 1px solid var(--border-light); }
         .testimonials-header p { text-align: center; color: var(--text-muted); margin-top: 10px; }
-        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; align-items: stretch; padding: 15px 0;}
         
-        .testimonial-inner { padding: 30px; position: relative; flex: 1; display: flex; flex-direction: column; } 
+        .testimonial-carousel-container { max-width: 800px; margin: 40px auto 0; position: relative; padding: 0 60px; }
+        .testimonial-single-wrapper { width: 100%; max-width: 600px; margin: 0 auto; padding: 15px 0;}
+        
+        .testimonial-inner { padding: 30px; position: relative; display: flex; flex-direction: column; text-align: left; } 
         .quote-icon { position: absolute; top: 20px; right: 20px; opacity: 0.1; }
-        .testimonial-text { color: var(--text-dark); font-size: 16px; line-height: 1.6; font-style: italic; margin-bottom: 24px; flex-grow: 1; }
+        .testimonial-text { color: var(--text-dark); font-size: 16px; line-height: 1.6; font-style: italic; margin-bottom: 24px; }
         .testimonial-author { display: flex; align-items: center; gap: 16px; }
         .author-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--terracota); }
         .author-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; color: var(--text-dark); }
         .author-role { font-size: 13px; color: var(--terracota); }
         
+        .force-flex { display: flex !important; }
+
+        /* FAQ & FOOTER */
+        .faq-section { padding: 80px 0; background: var(--ivory-bg); border-top: 1px solid var(--border-light); }
         .faq-container { max-width: 800px; margin: 0 auto; }
         .faq-item { background: #FFF; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 16px; overflow: hidden; cursor: pointer; transition: 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
         .faq-question { padding: 24px; display: flex; justify-content: space-between; align-items: center; }
@@ -805,7 +783,6 @@ export default function LandingPageQuadros() {
         .faq-answer { max-height: 0; padding: 0 24px; color: var(--text-muted); line-height: 1.6; transition: all 0.3s ease-out; }
         .faq-item.active .faq-answer { max-height: 200px; padding: 0 24px 24px; }
 
-        /* FOOTER */
         .lp-footer { background: var(--olive); padding: 60px 0 20px; color: #FFF; }
         .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; }
         .footer-brand h2 { color: #FFF; } .footer-brand span { color: var(--beige-bg); } .footer-brand p { color: rgba(255,255,255,0.7); margin-top: 8px; }
@@ -836,9 +813,13 @@ export default function LandingPageQuadros() {
 
         @media (max-width: 768px) {
           .header-btn-desk { display: none; } .countdown-box { min-width: 70px; padding: 10px; } .countdown-num { font-size: 22px; } .footer-content { flex-direction: column; text-align: center; justify-content: center; } .footer-bottom { flex-direction: column; justify-content: center; } .carousel-outer-container { padding: 0 10px; } 
+          
+          /* No celular, tira os botões do carrossel da galeria */
           .carousel-btn { display: none; } 
-          /* Força a barra de rolagem aparecer no celular para o usuário saber que pode arrastar */
-          .products-slider { justify-content: flex-start; } /* No mobile os cards começam na esquerda */
+          .force-flex { display: flex !important; } /* Mas força aparecer no carrossel de depoimentos */
+          .testimonial-carousel-container { padding: 0; }
+
+          .products-slider { justify-content: flex-start; } 
           .products-slider::-webkit-scrollbar { display: block; height: 6px; } .products-slider::-webkit-scrollbar-track { margin: 0 10px; }
         }
 
